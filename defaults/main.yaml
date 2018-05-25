@@ -1,0 +1,8 @@
+---
+# Define the vlan range to be configured, use this for quick configuration of multiple vlans (see README for examples)
+vlan_range: { }
+
+# Define the vlans to be configured (see README for examples)
+vlans: { }
+
+

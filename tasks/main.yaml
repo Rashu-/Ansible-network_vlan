@@ -1,0 +1,35 @@
+---
+
+- name: Check network device OS
+  assert:
+    that: >
+      ansible_network_os == 'nxos' or
+      ansible_network_os == 'ios'
+    msg: "Network device OS not defined or not supported by this role: {{ ansible_network_os }}"
+
+- name: Add/remove nxos vlan range
+  nxos_vlan:
+    vlan_range: "{{ item.ids | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ vlan_range }}"         
+  when: >
+    ansible_network_os == 'nxos' and
+    vlan_range is defined  
+  tags: 
+    - vlan_config
+    - nxos
+
+- name: Add/remove nxos vlans
+  nxos_vlan:
+    name: "{{ item.name | default(omit) }}"
+    vlan_id: "{{ item.id | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+    admin_state: "{{ item.admin_state | default('up') }}"    
+  with_items: "{{ vlans }}"    
+  when: >
+    ansible_network_os == 'nxos'  
+  tags: 
+    - vlan_config
+    - nxos
+
+
